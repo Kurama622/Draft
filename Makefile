@@ -25,6 +25,10 @@ $(OUTPUT_DIR)/README.html: README.md
 	mkdir -p $(OUTPUT_DIR)
 	pandoc --embed-resources -c pandoc.css --include-before-body=navbar.html --toc --lua-filter=toc-css.lua --standalone --metadata toc-title="Draft" $< -o $(dir $@)/index.html
 
+$(OUTPUT_DIR)/./README.html: README.md
+	mkdir -p $(OUTPUT_DIR)
+	pandoc --embed-resources -c pandoc.css --include-before-body=navbar.html --toc --lua-filter=toc-css.lua --standalone --metadata toc-title="Draft" $< -o $(dir $@)/index.html
+
 # 删除所有HTML文件
 clean:
 	rm -rf $(OUTPUT_DIR)
