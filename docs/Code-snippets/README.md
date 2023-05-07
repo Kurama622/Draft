@@ -65,7 +65,10 @@ int main() {
   std::cout << GetPreviewContext("./README.md") << std::endl;
 }
 ```
+
 **用处**
+
 1. 获取终端输出的结果时，可以保留其颜色信息
+
 2. 可以实现fzf类似的文本预览效果
 

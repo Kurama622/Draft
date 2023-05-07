@@ -1,3 +1,12 @@
+<!-- vim-markdown-toc GitLab -->
+
+* [HIP](#hip)
+    * [安装](#安装)
+    * [使用](#使用)
+* [免费的线上cuda环境](#免费的线上cuda环境)
+
+<!-- vim-markdown-toc -->
+
 ## [HIP](https://github.com/ROCm-Developer-Tools/HIP)
 
 ### 安装

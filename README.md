@@ -2,6 +2,6 @@
 
 ## [environment](./docs/environment)
 
-## [linux tools](./docs/linux-tools/README.md)
+## [linux tools](./docs/linux-tools)
 
-## [code snippets](./docs/code-snippets/README.md)
+## [code snippets](./docs/code-snippets)
