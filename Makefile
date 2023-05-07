@@ -7,8 +7,9 @@ PANDOC_OPTIONS=--embed-resources -c pandoc.css --include-before-body=navbar.html
 OUTPUT_DIR=site
 
 # 找到所有Markdown文件
-MARKDOWN_FILES=$(shell find . -name '*.md')
-
+# MARKDOWN_FILES=$(shell find . -name '*.md')
+# 找到所有有更改的Markdown文件，包括新增文件
+MARKDOWN_FILES=$(shell git diff --name-only --diff-filter=ACMRTUXB HEAD | grep md)
 # 将Markdown文件路径替换为HTML文件路径，并设置输出目录
 HTML_FILES=$(patsubst %.md,$(OUTPUT_DIR)/%.html,$(MARKDOWN_FILES))
 
