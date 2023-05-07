@@ -1,7 +1,7 @@
 # 一些笔记 
 
-## [environment](./docs/environment)
+## [Environment](./docs/Environment)
 
-## [linux tools](./docs/linux-tools)
+## [Linux tools](./docs/Linux-tools)
 
-## [code snippets](./docs/code-snippets)
+## [Code snippets](./docs/Code-snippets)
