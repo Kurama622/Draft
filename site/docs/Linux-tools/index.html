@@ -474,88 +474,30 @@ content: "▾ ";
 <body>
 <ul class="horizontal-nav">
     <a href="https://stubbornvegeta.github.io/Draft">Draft-Home</a>
-    <a href="https://stubbornvegeta.github.io/Draft/docs/Environment/README.html">Environment</a>
-    <a href="https://stubbornvegeta.github.io/Draft/docs/Code-snippets/README.html">Code-snippets</a>
-    <a href="https://stubbornvegeta.github.io/Draft/docs/Linux-tools/README.html">Linux-tools</a>
+    <a href="https://stubbornvegeta.github.io/Draft/docs/Environment/index.html">Environment</a>
+    <a href="https://stubbornvegeta.github.io/Draft/docs/Code-snippets/index.html">Code-snippets</a>
+    <a href="https://stubbornvegeta.github.io/Draft/docs/Linux-tools/index.html">Linux-tools</a>
 </ul>
 <nav id="TOC" role="doc-toc">
-<h2 id="toc-title">Environment</h2>
+<h2 id="toc-title">Linux-tools</h2>
 <ul>
-<li><a href="#hip" id="toc-hip">HIP</a>
+<li><a href="#程序耗时测量工具" id="toc-程序耗时测量工具">程序耗时测量工具</a>
 <ul>
-<li><a href="#安装" id="toc-安装">安装</a></li>
-<li><a href="#使用" id="toc-使用">使用</a></li>
+<li><a href="#hyperfine" id="toc-hyperfine">hyperfine</a></li>
 </ul></li>
-<li><a href="#免费的线上cuda环境" id="toc-免费的线上cuda环境">免费的线上cuda环境</a></li>
 </ul>
 </nav>
-<!-- vim-markdown-toc GitLab -->
-<ul>
-<li><a href="#hip">HIP</a>
-<ul>
-<li><a href="#安装">安装</a></li>
-<li><a href="#使用">使用</a></li>
-</ul></li>
-<li><a href="#免费的线上cuda环境">免费的线上cuda环境</a></li>
-</ul>
-<!-- vim-markdown-toc -->
-<h2 id="hip"><a href="https://github.com/ROCm-Developer-Tools/HIP">HIP</a></h2>
-<h3 id="安装">安装</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> pacman <span class="at">-S</span> hip-runtime-amd</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">pushd</span> /opt/rocm/hip/bin</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://raw.githubusercontent.com/ROCm-Developer-Tools/HIPIFY/amd-staging/bin/hipify-perl<span class="kw">;</span> <span class="fu">sudo</span> chmod +x hipify-perl</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">popd</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;export HIP_PATH=&quot;</span>/opt/rocm/hip\nexport PATH=<span class="st">&quot;</span><span class="va">$PATH</span><span class="st">:/opt/rocm/bin:</span><span class="va">$HIP_PATH</span><span class="st">/bin&quot;</span> <span class="op">&gt;</span> <span class="va">$HOME</span>/.zshrc</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> <span class="va">$HOME</span>/.zshrc</span></code></pre></div>
-<h3 id="使用">使用</h3>
-<p>将CUDA代码转换成HIP代码</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hipify-perl</span> test.cu <span class="op">&gt;</span> test.cpp</span></code></pre></div>
-<p>编译HIP代码</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hipcc</span> test.cpp <span class="at">-o</span> test</span></code></pre></div>
-<h2 id="免费的线上cuda环境">免费的线上cuda环境</h2>
-<ol type="1">
-<li><p>登录<a href="https://colab.research.google.com/">colab</a>，需要有google账号</p></li>
-<li><p>更改runtime选项</p></li>
-</ol>
-<p><code>Runtime</code> &gt; <code>change runtime type</code> &gt;
-<code>GPU</code></p>
-<ol start="3" type="1">
-<li>添加测试代码块</li>
-</ol>
-<p><code>%%writefile test.cu</code>会将该代码块后面的代码写入到test.cu文件中</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>writefile test<span class="op">.</span>cu</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;cstdio&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;cuda_runtime.h&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>__device__ <span class="dt">void</span> Print<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  printf<span class="op">(</span><span class="st">&quot;this is a GPU</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> kernel_host<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  printf<span class="op">(</span><span class="st">&quot;this is a CPU</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>__global__ <span class="dt">void</span> kernel<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  Print<span class="op">();</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  kernel<span class="op">&lt;&lt;&lt;</span><span class="dv">1</span><span class="op">,</span><span class="dv">1</span><span class="op">&gt;&gt;&gt;();</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  cudaDeviceSynchronize<span class="op">();</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  kernel_host<span class="op">();</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<ol start="4" type="1">
-<li>编译</li>
-</ol>
-<p><code>!</code>会运行shell命令，使用<code>nvcc</code>编译步骤3中生成的<code>test.cu</code>文件</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!nvcc</span> test.cu <span class="at">-o</span> test</span></code></pre></div>
-<ol start="5" type="1">
-<li>运行</li>
-</ol>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!./test</span></span></code></pre></div>
-<p><strong>output:</strong></p>
-<pre><code>this is a GPU
-this is a CPU</code></pre>
+<h2 id="程序耗时测量工具">程序耗时测量工具</h2>
+<h3 id="hyperfine">hyperfine</h3>
+<h4 id="安装">安装</h4>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> pacman <span class="at">-S</span> hyperfine</span></code></pre></div>
+<h4 id="示例">示例</h4>
+<p>测量zsh的启动时间</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hyperfine</span> <span class="st">&quot;zsh -i -c exit&quot;</span></span></code></pre></div>
+<p><strong>结果</strong></p>
+<pre><code>Benchmark 1: zsh -i -c exit
+  Time (mean ± σ):      19.9 ms ±   0.4 ms    [User: 15.0 ms, System: 6.9 ms]
+  Range (min … max):    18.8 ms …  21.0 ms    138 runs</code></pre>
 
 <!-- Javascript added by toc-css.lua to make TOC expandable on click -->
 <script>
