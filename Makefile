@@ -18,16 +18,11 @@ all: $(HTML_FILES)
 # 生成HTML文件
 $(OUTPUT_DIR)/%.html: %.md
 	mkdir -p $(dir $@)
-	pandoc --embed-resources -c pandoc.css --include-before-body=navbar.html --toc --lua-filter=toc-css.lua --standalone --metadata toc-title=$(shell basename $(dir $<)) $< -o $@
-	mv $@ $(dir $@)/index.html
+	pandoc --embed-resources -c pandoc.css --include-before-body=navbar.html --toc --lua-filter=toc-css.lua --standalone --metadata toc-title=$(shell basename $(dir $<)) $< -o $(dir $@)/index.html
 
 $(OUTPUT_DIR)/./README.html: README.md
 	mkdir -p $(OUTPUT_DIR)
-	pandoc --embed-resources -c pandoc.css --include-before-body=navbar.html --toc --lua-filter=toc-css.lua --standalone --metadata toc-title="Draft" $< -o $@
-	mv $@ $(dir $@)/index.html
-
-# all:
-# 	mv $(OUTPUT_DIR)/README.html $(OUTPUT_DIR)/index.html
+	pandoc --embed-resources -c pandoc.css --include-before-body=navbar.html --toc --lua-filter=toc-css.lua --standalone --metadata toc-title="Draft" $< -o $(dir $@)/index.html
 
 # 删除所有HTML文件
 clean:
