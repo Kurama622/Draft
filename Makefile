@@ -23,6 +23,8 @@ $(OUTPUT_DIR)/%.html: %.md
 	# $(info $(HTML_FILES))
 	pandoc --embed-resources -c pandoc.css --include-before-body=navbar.html --toc --lua-filter=toc-css.lua --standalone --metadata toc-title=$(shell basename $(dir $<)) $< -o $@
 
+all:
+	mv $(OUTPUT_DIR)/README.html $(OUTPUT_DIR)/index.html
 # 删除所有HTML文件
 clean:
 	rm -rf $(OUTPUT_DIR)
