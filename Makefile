@@ -21,7 +21,7 @@ $(OUTPUT_DIR)/%.html: %.md
 	mkdir -p $(dir $@)
 	pandoc --embed-resources -c pandoc.css --include-before-body=navbar.html --toc --lua-filter=toc-css.lua --standalone --metadata toc-title=$(shell basename $(dir $<)) $< -o $(dir $@)/index.html
 
-$(OUTPUT_DIR)/./README.html: README.md
+$(OUTPUT_DIR)/README.html: README.md
 	mkdir -p $(OUTPUT_DIR)
 	pandoc --embed-resources -c pandoc.css --include-before-body=navbar.html --toc --lua-filter=toc-css.lua --standalone --metadata toc-title="Draft" $< -o $(dir $@)/index.html
 
