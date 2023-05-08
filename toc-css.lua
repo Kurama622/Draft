@@ -89,6 +89,19 @@ nav ul li ul  {
   padding-right: 1cm;
   transition: 0.5s;
 }
+@media only screen and (max-width: 650px) {
+  body {
+    padding-left: 0em;
+    padding-right: 0em;
+    transition: 0.5s;
+  }
+  .navside {
+    width: 2cm;
+    margin-left: -2cm;
+    padding-right: 1cm;
+    transition: 0.5s;
+  }
+}
 .navside h2:after {
   content: " ▸";
 }

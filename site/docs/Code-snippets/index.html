@@ -377,6 +377,42 @@ h2, h3 {
 page-break-after: avoid;
 }
 }
+@media only screen and (max-width: 550px) {
+body {
+margin-left: 2em;
+max-width: 42em;
+font-size: 0.5em;
+}
+.horizontal-nav li {
+margin-right: 2em;
+}
+.horizontal-nav a {
+color: #333;
+text-decoration: none;
+font-size: 0.9em;
+font-weight: bold;
+
+transition: all .2s ease-in-out;
+}
+h1 {
+font-size: 2.1em;
+}
+h2 {
+font-size: 1.6em;
+}
+h3 {
+font-size: 1.1em;
+}
+h4 {
+font-size: 0.8em;
+}
+h5 {
+font-size: 0.6em;
+}
+h6 {
+font-size: 0.5em;
+}
+}
 </style>
    
   <!-- CSS added by filter 'toc-css.lua' for TOC hovering to the side -->
@@ -447,6 +483,19 @@ width: 6cm;
 margin-left: -6cm;
 padding-right: 1cm;
 transition: 0.5s;
+}
+@media only screen and (max-width: 650px) {
+body {
+padding-left: 0em;
+padding-right: 0em;
+transition: 0.5s;
+}
+.navside {
+width: 2cm;
+margin-left: -2cm;
+padding-right: 1cm;
+transition: 0.5s;
+}
 }
 .navside h2:after {
 content: " ▸";
