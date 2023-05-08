@@ -366,15 +366,24 @@ table td {
     max-width: 42em;
     font-size: 0.5em;
   }
+    .horizontal-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #fff;
+      /* box-shadow: 0 1px 4px rgba(0,0,0,.1); */
+      padding: 5px 3%;
+      border-bottom: 1px solid #ddd;
+    }
   .horizontal-nav li {
-    margin-right: 1em;
+    margin-right: 2em;
   }
   .horizontal-nav a {
     color: #333;
     text-decoration: none;
     font-size: 0.9em;
     font-weight: bold;
-    /* letter-spacing: 0.5em; */
+    /* letter-spacing: 1px; */
     transition: all .2s ease-in-out;
   }
     h1 {
