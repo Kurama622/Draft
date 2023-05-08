@@ -380,10 +380,13 @@ page-break-after: avoid;
 @media only screen and (max-width: 550px) {
 body {
 margin-left: 2em;
-max-width: 42em;
+margin-right: 2em;
+
 font-size: 0.5em;
 }
 .horizontal-nav {
+margin-left: 0em;
+margin-right: 0em;
 display: flex;
 justify-content: space-between;
 align-items: center;
@@ -393,7 +396,8 @@ padding: 5px 3%;
 border-bottom: 1px solid #ddd;
 }
 .horizontal-nav li {
-margin-right: 2em;
+margin-left: 1em;
+margin-right: 1em;
 }
 .horizontal-nav a {
 color: #333;
