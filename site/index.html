@@ -115,6 +115,7 @@ font-weight: bold;
 }
 h1 {
 font-size: 2.5em;
+text-align: center;
 }
 h2 {
 font-size: 2em;
@@ -346,6 +347,7 @@ transition: all .2s ease-in-out;
 }
 h1 {
 font-size: 2.2em;
+text-align: center;
 }
 h2 {
 font-size: 1.7em;
@@ -480,25 +482,21 @@ content: "▾ ";
 <nav id="TOC" role="doc-toc">
 <h2 id="toc-title">Draft</h2>
 <ul>
-<li><a href="#一些笔记" id="toc-一些笔记">一些笔记</a>
-<ul>
-<li><a href="#environment" id="toc-environment">Environment</a></li>
-<li><a href="#tools" id="toc-tools">Tools</a></li>
-<li><a href="#snippets" id="toc-snippets">Snippets</a></li>
-<li><a href="#languages" id="toc-languages">Languages</a>
+<li><a href="#倔强的贝吉塔" id="toc-倔强的贝吉塔">倔强的贝吉塔</a>
 <ul>
 <li><a href="#参考" id="toc-参考">参考</a></li>
 </ul></li>
-</ul></li>
 </ul>
 </nav>
-<h1 id="一些笔记">一些笔记</h1>
-<h2 id="environment"><a href="./docs/Environment">Environment</a></h2>
-<h2 id="tools"><a href="./docs/Tools">Tools</a></h2>
-<h2 id="snippets"><a href="./docs/Snippets">Snippets</a></h2>
-<h2 id="languages"><a href="./docs/Languages">Languages</a></h2>
+<h1 id="倔强的贝吉塔">倔强的贝吉塔</h1>
 <p>markdown+pandoc搭建的博客</p>
-<h3 id="参考">参考</h3>
+<ul>
+<li><a href="./docs/Environment">Environment</a></li>
+<li><a href="./docs/Tools">Tools</a></li>
+<li><a href="./docs/Snippets">Snippets</a></li>
+<li><a href="./docs/Languages">Languages</a></li>
+</ul>
+<h2 id="参考">参考</h2>
 <ul>
 <li><p><a href="https://github.com/cysouw/toc-css">toc-css.lua</a></p></li>
 <li><p><a href="https://gist.github.com/killercup/5917178">pandoc.css</a></p></li>
@@ -516,13 +514,14 @@ content: "▾ ";
     if (e.clientX < e.currentTarget.getBoundingClientRect().left + buttonsize) {
       b.classList.toggle("paddingleft");
       n.classList.toggle("navside");
-      // n.classList.toggle("navshown");
     } else {
       b.classList.toggle("paddingleft");
       n.classList.toggle("navside");
-      // n.classList.remove("navshown");
     };
   });
+
+  // show/hide subsections
+  const allLis = document.querySelectorAll("nav li");
 
   // by default show TOC in large window
   window.onload = function() {
@@ -530,6 +529,10 @@ content: "▾ ";
       b.classList.add("paddingleft");
       n.classList.add("navside");
     };
+    for (const li of allLis) {
+      li.classList.toggle('subShow');
+      e.preventDefault();
+    }
   };
 
   // show/hide TOC on resize
@@ -543,8 +546,6 @@ content: "▾ ";
     };
   };
 
-  // show/hide subsections
-  const allLis = document.querySelectorAll("nav li");
 
   for (const li of allLis) {
     li.addEventListener('click', function (e) {
@@ -552,9 +553,6 @@ content: "▾ ";
         li.classList.toggle('subShow');
         e.preventDefault();
       };
-      // if (e.clientX > e.currentTarget.getBoundingClientRect().left + 3*buttonsize) {
-      //   n.classList.remove("navshown");
-      // };
     });
   };
 

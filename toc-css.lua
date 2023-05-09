@@ -105,6 +105,7 @@ nav ul li ul  {
 .navside h2:after {
   content: " ▸";
 }
+
 .navshown {
   width: 50%;
   transition: 0.5s;
@@ -138,13 +139,14 @@ script = [[
     if (e.clientX < e.currentTarget.getBoundingClientRect().left + buttonsize) {
       b.classList.toggle("paddingleft");
       n.classList.toggle("navside");
-      // n.classList.toggle("navshown");
     } else {
       b.classList.toggle("paddingleft");
       n.classList.toggle("navside");
-      // n.classList.remove("navshown");
     };
   });
+
+  // show/hide subsections
+  const allLis = document.querySelectorAll("nav li");
 
   // by default show TOC in large window
   window.onload = function() {
@@ -152,6 +154,10 @@ script = [[
       b.classList.add("paddingleft");
       n.classList.add("navside");
     };
+    for (const li of allLis) {
+      li.classList.toggle('subShow');
+      e.preventDefault();
+    }
   };
 
   // show/hide TOC on resize
@@ -165,8 +171,6 @@ script = [[
     };
   };
 
-  // show/hide subsections
-  const allLis = document.querySelectorAll("nav li");
 
   for (const li of allLis) {
     li.addEventListener('click', function (e) {
@@ -174,9 +178,6 @@ script = [[
         li.classList.toggle('subShow');
         e.preventDefault();
       };
-      // if (e.clientX > e.currentTarget.getBoundingClientRect().left + 3*buttonsize) {
-      //   n.classList.remove("navshown");
-      // };
     });
   };
 

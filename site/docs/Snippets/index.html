@@ -179,6 +179,7 @@ font-weight: bold;
 }
 h1 {
 font-size: 2.5em;
+text-align: center;
 }
 h2 {
 font-size: 2em;
@@ -410,6 +411,7 @@ transition: all .2s ease-in-out;
 }
 h1 {
 font-size: 2.2em;
+text-align: center;
 }
 h2 {
 font-size: 1.7em;
@@ -629,13 +631,14 @@ content: "▾ ";
     if (e.clientX < e.currentTarget.getBoundingClientRect().left + buttonsize) {
       b.classList.toggle("paddingleft");
       n.classList.toggle("navside");
-      // n.classList.toggle("navshown");
     } else {
       b.classList.toggle("paddingleft");
       n.classList.toggle("navside");
-      // n.classList.remove("navshown");
     };
   });
+
+  // show/hide subsections
+  const allLis = document.querySelectorAll("nav li");
 
   // by default show TOC in large window
   window.onload = function() {
@@ -643,6 +646,10 @@ content: "▾ ";
       b.classList.add("paddingleft");
       n.classList.add("navside");
     };
+    for (const li of allLis) {
+      li.classList.toggle('subShow');
+      e.preventDefault();
+    }
   };
 
   // show/hide TOC on resize
@@ -656,8 +663,6 @@ content: "▾ ";
     };
   };
 
-  // show/hide subsections
-  const allLis = document.querySelectorAll("nav li");
 
   for (const li of allLis) {
     li.addEventListener('click', function (e) {
@@ -665,9 +670,6 @@ content: "▾ ";
         li.classList.toggle('subShow');
         e.preventDefault();
       };
-      // if (e.clientX > e.currentTarget.getBoundingClientRect().left + 3*buttonsize) {
-      //   n.classList.remove("navshown");
-      // };
     });
   };
 
