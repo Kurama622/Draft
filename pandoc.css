@@ -116,28 +116,28 @@ h4, h5, h6 {
 }
 
 h1 {
-  font-size: 2.4em;
+  font-size: 2.2em;
   text-align: center;
 }
 
 h2 {
-  font-size: 1.9em;
+  font-size: 1.7em;
 }
 
 h3 {
-  font-size: 1.4em;
+  font-size: 1.2em;
 }
 
 h4 {
-  font-size: 1.1em;
-}
-
-h5 {
   font-size: 0.9em;
 }
 
+h5 {
+  font-size: 0.7em;
+}
+
 h6 {
-  font-size: 0.8em;
+  font-size: 0.6em;
 }
 
 blockquote {
@@ -391,29 +391,5 @@ table td {
     font-weight: bold;
     /* letter-spacing: 1px; */
     transition: all .2s ease-in-out;
-  }
-  h1 {
-    font-size: 2.2em;
-    text-align: center;
-  }
-  
-  h2 {
-    font-size: 1.7em;
-  }
-  
-  h3 {
-    font-size: 1.2em;
-  }
-  
-  h4 {
-    font-size: 0.9em;
-  }
-  
-  h5 {
-    font-size: 0.7em;
-  }
-  
-  h6 {
-    font-size: 0.6em;
   }
 }
