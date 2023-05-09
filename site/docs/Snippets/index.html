@@ -116,7 +116,8 @@ padding: 0;
 display: flex;
 }
 .horizontal-nav li {
-margin-right: 30px;
+margin-left: 1em;
+margin-right: 1em;
 }
 .horizontal-nav a {
 color: #333;
@@ -402,28 +403,28 @@ margin-right: 1em;
 .horizontal-nav a {
 color: #333;
 text-decoration: none;
-font-size: 0.9em;
+font-size: 1em;
 font-weight: bold;
 
 transition: all .2s ease-in-out;
 }
 h1 {
-font-size: 2.1em;
+font-size: 2.2em;
 }
 h2 {
-font-size: 1.6em;
+font-size: 1.7em;
 }
 h3 {
-font-size: 1.1em;
+font-size: 1.2em;
 }
 h4 {
-font-size: 0.8em;
+font-size: 0.9em;
 }
 h5 {
-font-size: 0.6em;
+font-size: 0.7em;
 }
 h6 {
-font-size: 0.5em;
+font-size: 0.6em;
 }
 }
 </style>
@@ -536,30 +537,85 @@ content: "▾ ";
 <ul class="horizontal-nav">
     <a href="https://stubbornvegeta.github.io/Draft">Draft-Home</a>
     <a href="https://stubbornvegeta.github.io/Draft/docs/Environment/index.html">Environment</a>
-    <a href="https://stubbornvegeta.github.io/Draft/docs/Code-snippets/index.html">Code-snippets</a>
-    <a href="https://stubbornvegeta.github.io/Draft/docs/Linux-tools/index.html">Linux-tools</a>
+    <a href="https://stubbornvegeta.github.io/Draft/docs/Snippets/index.html">Snippets</a>
+    <a href="https://stubbornvegeta.github.io/Draft/docs/Tools/index.html">Tools</a>
     <a href="https://stubbornvegeta.github.io/Draft/docs/Languages/index.html">Languages</a>
 </ul>
 <nav id="TOC" role="doc-toc">
-<h2 id="toc-title">Linux-tools</h2>
+<h2 id="toc-title">Snippets</h2>
 <ul>
-<li><a href="#程序耗时测量工具" id="toc-程序耗时测量工具">程序耗时测量工具</a>
-<ul>
-<li><a href="#hyperfine" id="toc-hyperfine">hyperfine</a></li>
-</ul></li>
+<li><a href="#伪装tty获取程序输出" id="toc-伪装tty获取程序输出">伪装tty获取程序输出</a></li>
 </ul>
 </nav>
-<h2 id="程序耗时测量工具">程序耗时测量工具</h2>
-<h3 id="hyperfine">hyperfine</h3>
-<h4 id="安装">安装</h4>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> pacman <span class="at">-S</span> hyperfine</span></code></pre></div>
-<h4 id="示例">示例</h4>
-<p>测量zsh的启动时间</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">hyperfine</span> <span class="st">&quot;zsh -i -c exit&quot;</span></span></code></pre></div>
-<p><strong>结果</strong></p>
-<pre><code>Benchmark 1: zsh -i -c exit
-  Time (mean ± σ):      19.9 ms ±   0.4 ms    [User: 15.0 ms, System: 6.9 ms]
-  Range (min … max):    18.8 ms …  21.0 ms    138 runs</code></pre>
+<h2 id="伪装tty获取程序输出">伪装tty获取程序输出</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;pty.h&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;sys/stat.h&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="dt">FILE</span><span class="op">*</span> OpenPty<span class="op">(</span><span class="at">const</span> <span class="dt">char</span><span class="op">*</span> file<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> master<span class="op">,</span> slave<span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">char</span> name<span class="op">[</span><span class="dv">1024</span><span class="op">];</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>openpty<span class="op">(&amp;</span>master<span class="op">,</span> <span class="op">&amp;</span>slave<span class="op">,</span> name<span class="op">,</span> NULL<span class="op">,</span> NULL<span class="op">)</span> <span class="op">==</span> <span class="op">-</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout<span class="op"> &lt;&lt;</span> <span class="st">&quot;Error: openpty failed!&quot;</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> NULL<span class="op">;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">// fork a child process</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="dt">pid_t</span> pid <span class="op">=</span> fork<span class="op">();</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>pid <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout<span class="op"> &lt;&lt;</span> <span class="st">&quot;Error: fork failed!&quot;</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> NULL<span class="op">;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>pid <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">// child process: execute shell command</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    close<span class="op">(</span>master<span class="op">);</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    dup2<span class="op">(</span>slave<span class="op">,</span> STDIN_FILENO<span class="op">);</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    dup2<span class="op">(</span>slave<span class="op">,</span> STDOUT_FILENO<span class="op">);</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    dup2<span class="op">(</span>slave<span class="op">,</span> STDERR_FILENO<span class="op">);</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    execlp<span class="op">(</span><span class="st">&quot;bat&quot;</span><span class="op">,</span> <span class="st">&quot;bat&quot;</span><span class="op">,</span> <span class="st">&quot;--paging=never&quot;</span><span class="op">,</span> <span class="st">&quot;--line-range=0:100&quot;</span><span class="op">,</span> file<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    exit<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">// parent process: return a FILE* point associated with master end of the pty</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    close<span class="op">(</span>slave<span class="op">);</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span><span class="op">*</span> f <span class="op">=</span> fdopen<span class="op">(</span>master<span class="op">,</span> <span class="st">&quot;r&quot;</span><span class="op">);</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> f<span class="op">;</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>string<span class="op"> </span>GetPreviewContext<span class="op">(</span><span class="at">const</span> <span class="dt">char</span><span class="op">*</span> cmd<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  <span class="dt">char</span> buffer<span class="op">[</span><span class="dv">2</span><span class="op">];</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  <span class="dt">size_t</span> len<span class="op">;</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>string<span class="op"> </span>result<span class="op">;</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  <span class="dt">FILE</span><span class="op">*</span> f <span class="op">=</span> OpenPty<span class="op">(</span>cmd<span class="op">);</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>f <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  <span class="co">// read output from shell command</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> <span class="op">{</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">((</span>len <span class="op">=</span> fread<span class="op">(</span>buffer<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>buffer<span class="op">),</span> f<span class="op">))</span> <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>      result <span class="op">+=</span> buffer<span class="op">;</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span> <span class="cf">catch</span> <span class="op">(...)</span> <span class="op">{</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    fclose<span class="op">(</span>f<span class="op">);</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span><span class="op">;</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>  fclose<span class="op">(</span>f<span class="op">);</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>cout<span class="op"> &lt;&lt;</span> GetPreviewContext<span class="op">(</span><span class="st">&quot;./README.md&quot;</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>用处</strong></p>
+<ol type="1">
+<li><p>获取终端输出的结果时，可以保留其颜色信息</p></li>
+<li><p>可以实现fzf类似的文本预览效果</p></li>
+</ol>
 
 <!-- Javascript added by toc-css.lua to make TOC expandable on click -->
 <script>

@@ -6,7 +6,7 @@ PANDOC_OPTIONS=--embed-resources -c pandoc.css --include-before-body=navbar.html
 # 指定输出目录
 OUTPUT_DIR=site
 
-style_changed=$(shell git diff --name-only | grep -E "\.css|\.lua" | wc -l)
+style_changed=$(shell git diff --name-only | grep -E "\.css|\.lua|navbar\.html" | wc -l)
 
 ifeq ($(style_changed), 0)
 # 找到所有有更改的Markdown文件，包括新增文件

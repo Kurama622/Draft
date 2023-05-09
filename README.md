@@ -2,9 +2,9 @@
 
 ## [Environment](./docs/Environment)
 
-## [Linux tools](./docs/Linux-tools)
+## [Tools](./docs/Tools)
 
-## [Code snippets](./docs/Code-snippets)
+## [Snippets](./docs/Snippets)
 
 ## [Languages](./docs/Languages)
 
