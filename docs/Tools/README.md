@@ -1,3 +1,16 @@
+<!-- vim-markdown-toc GitLab -->
+
+* [程序耗时测量工具](#程序耗时测量工具)
+    * [hyperfine](#hyperfine)
+        * [安装](#安装)
+        * [示例](#示例)
+* [查看机器硬件信息](#查看机器硬件信息)
+    * [dmidecode](#dmidecode)
+        * [安装](#安装-1)
+        * [支持的选项](#支持的选项)
+
+<!-- vim-markdown-toc -->
+
 ## 程序耗时测量工具
 
 ### hyperfine
@@ -26,6 +39,7 @@ Benchmark 1: zsh -i -c exit
 ## 查看机器硬件信息
 
 ### dmidecode
+
 #### 安装
 
 ```bash
@@ -34,7 +48,7 @@ sudo pacman -S dmidecode
 
 #### 支持的选项
 <details>
-  <summary>点击展开/收起代码块</summary>
+  <summary>点击展开/收起 内容</summary>
     ```bash
     Type	Information
     0	BIOS
@@ -86,9 +100,9 @@ sudo pacman -S dmidecode
 ```bash
 sudo dmidecode -t memory
 ```
-- output
+** 结果 **
 <details>
-  <summary>点击展开/收起结果</summary>
+  <summary>点击展开/收起 结果</summary>
     ```bash
 # dmidecode 3.5
     Getting SMBIOS data from sysfs.
@@ -175,8 +189,11 @@ sudo dmidecode -t memory
     ```
 </details>
 
+可以看到此电脑最多支持64G的内存，目前安装了2条8G的内存条
+
 
 ### 获取系统的L1_CACHE_LINE
+
 ```bash
 getconf LEVEL1_DCACHE_LINESIZE
 ```
