@@ -30,6 +30,7 @@ hyperfine "zsh -i -c exit"
 ```
 
 **结果**
+
 ```
 Benchmark 1: zsh -i -c exit
   Time (mean ± σ):      19.9 ms ±   0.4 ms    [User: 15.0 ms, System: 6.9 ms]
@@ -97,10 +98,13 @@ sudo pacman -S dmidecode
 </details>
 
 #### 示例
+
 ```bash
 sudo dmidecode -t memory
 ```
-** 结果 **
+
+**结果**
+
 <details>
   <summary>点击展开/收起 结果</summary>
     ```bash
