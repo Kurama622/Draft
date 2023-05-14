@@ -8,6 +8,7 @@
     * [dmidecode](#dmidecode)
         * [安装](#安装-1)
         * [支持的选项](#支持的选项)
+    * [获取系统的CACHE_LINE](#获取系统的cache_line)
 
 <!-- vim-markdown-toc -->
 
@@ -49,7 +50,7 @@ sudo pacman -S dmidecode
 
 #### 支持的选项
 <details>
-  <summary>点击展开/收起 内容</summary>
+  <summary>点击 展开/收起 内容</summary>
     ```bash
     Type	Information
     0	BIOS
@@ -106,7 +107,7 @@ sudo dmidecode -t memory
 **结果**
 
 <details>
-  <summary>点击展开/收起 结果</summary>
+  <summary>点击 展开/收起 结果</summary>
     ```bash
 # dmidecode 3.5
     Getting SMBIOS data from sysfs.
@@ -190,14 +191,20 @@ sudo dmidecode -t memory
             Volatile Size: 8 GB
             Cache Size: None
             Logical Size: None
-    ```
+```
 </details>
 
 可以看到此电脑最多支持64G的内存，目前安装了2条8G的内存条
 
 
-### 获取系统的L1_CACHE_LINE
+### 获取系统的CACHE_LINE
 
 ```bash
 getconf LEVEL1_DCACHE_LINESIZE
+```
+
+**结果**
+
+```bash
+64
 ```

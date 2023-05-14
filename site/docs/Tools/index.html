@@ -477,7 +477,7 @@ transition: 0.5s;
 }
 .navside {
 width: 6cm;
-margin-left: -6cm;
+margin-left: -6.4cm;
 padding-right: 1cm;
 transition: 0.5s;
 }
@@ -534,6 +534,7 @@ content: "▾ ";
 <li><a href="#查看机器硬件信息" id="toc-查看机器硬件信息">查看机器硬件信息</a>
 <ul>
 <li><a href="#dmidecode" id="toc-dmidecode">dmidecode</a></li>
+<li><a href="#获取系统的cache_line" id="toc-获取系统的cache_line">获取系统的CACHE_LINE</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -554,6 +555,7 @@ content: "▾ ";
 <li><a href="#安装-1">安装</a></li>
 <li><a href="#支持的选项">支持的选项</a></li>
 </ul></li>
+<li><a href="#获取系统的cache_line">获取系统的CACHE_LINE</a></li>
 </ul></li>
 </ul>
 <!-- vim-markdown-toc -->
@@ -575,7 +577,7 @@ content: "▾ ";
 <h4 id="支持的选项">支持的选项</h4>
 <details>
 <summary>
-点击展开/收起 内容
+点击 展开/收起 内容
 </summary>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Type</span>    Information</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">0</span>   BIOS</span>
@@ -626,7 +628,7 @@ content: "▾ ";
 <p><strong>结果</strong></p>
 <details>
 <summary>
-点击展开/收起 结果
+点击 展开/收起 结果
 </summary>
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dmidecode 3.5</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Getting</span> SMBIOS data from sysfs.</span>
@@ -709,17 +711,13 @@ content: "▾ ";
 <span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>          <span class="ex">Non-Volatile</span> Size: None</span>
 <span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>          <span class="ex">Volatile</span> Size: 8 GB</span>
 <span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>          <span class="ex">Cache</span> Size: None</span>
-<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>          <span class="ex">Logical</span> Size: None</span>
-<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>  <span class="kw">```</span></span>
-<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>/details<span class="op">&gt;</span></span>
-<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a><span class="ex">可以看到此电脑最多支持64G的内存，目前安装了2条8G的内存条</span></span>
-<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a><span class="co">### 获取系统的L1_CACHE_LINE</span></span>
-<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a><span class="kw">```</span>bash</span>
-<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a><span class="ex">getconf</span> LEVEL1_DCACHE_LINESIZE</span></code></pre></div>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>          <span class="ex">Logical</span> Size: None</span></code></pre></div>
+</details>
+<p>可以看到此电脑最多支持64G的内存，目前安装了2条8G的内存条</p>
+<h3 id="获取系统的cache_line">获取系统的CACHE_LINE</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">getconf</span> LEVEL1_DCACHE_LINESIZE</span></code></pre></div>
+<p><strong>结果</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">64</span></span></code></pre></div>
 
 <!-- Javascript added by toc-css.lua to make TOC expandable on click -->
 <script>
@@ -750,7 +748,6 @@ content: "▾ ";
     };
     for (const li of allLis) {
       li.classList.toggle('subShow');
-      e.preventDefault();
     }
   };
 

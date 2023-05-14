@@ -85,7 +85,7 @@ nav ul li ul  {
 }
 .navside {
   width: 6cm;
-  margin-left: -6cm;
+  margin-left: -6.4cm;
   padding-right: 1cm;
   transition: 0.5s;
 }
@@ -156,7 +156,6 @@ script = [[
     };
     for (const li of allLis) {
       li.classList.toggle('subShow');
-      e.preventDefault();
     }
   };
 
