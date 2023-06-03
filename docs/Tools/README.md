@@ -24,19 +24,98 @@ sudo pacman -S hyperfine
 
 #### 示例
 
-测量zsh的启动时间
+> 测量zsh的启动时间
 
 ```bash
 hyperfine "zsh -i -c exit"
 ```
 
-**结果**
+结果
 
 ```
 Benchmark 1: zsh -i -c exit
   Time (mean ± σ):      19.9 ms ±   0.4 ms    [User: 15.0 ms, System: 6.9 ms]
   Range (min … max):    18.8 ms …  21.0 ms    138 runs
 ```
+
+> c++中map的重哈希和vector的内存移动耗时对比
+
+重哈希rehash
+
+```cpp
+// rehash.cpp
+#include <unordered_map>
+#include <string>
+
+int main() {
+  std::unordered_map<int, std::string> my_map;
+  constexpr int N = 50000;
+  for(int i = 0; i < N; ++i) {
+    my_map[i] = "hello world hello world hello world \
+                 hello world hello world hello world \
+                 hello world hello world hello world \
+                 hello world hello world hello world \
+                 hello world hello world hello world \
+                 hello world hello world hello world \
+                 hello world hello world hello world \
+                 hello world hello world hello world \
+                 hello world hello world hello world ";
+  }
+
+  return 0;
+}
+```
+
+内存移动recopy
+
+```cpp
+// recopy.cpp
+#include <vector>
+#include <string>
+
+int main() {
+  std::vector<std::string> my_vec;
+  constexpr int N = 50000;
+  int a[N];
+  for(int i = 0; i < N; ++i) {
+    my_vec.emplace_back("hello world hello world hello world \
+                         hello world hello world hello world \
+                         hello world hello world hello world \
+                         hello world hello world hello world \
+                         hello world hello world hello world \
+                         hello world hello world hello world \
+                         hello world hello world hello world \
+                         hello world hello world hello world \
+                         hello world hello world hello world ");
+
+    a[i] = i;
+  }
+  return 0;
+}
+```
+
+运行hyperfine
+
+```
+hyperfine --warmup=5 "./rehash" "./recopy"
+```
+
+结果
+
+```
+Benchmark 1: ./rehash
+  Time (mean ± σ):      21.5 ms ±   1.0 ms    [User: 13.5 ms, System: 7.8 ms]
+  Range (min … max):    20.0 ms …  24.7 ms    126 runs
+
+Benchmark 2: ./recopy
+  Time (mean ± σ):      14.8 ms ±   0.9 ms    [User: 7.1 ms, System: 7.6 ms]
+  Range (min … max):    13.4 ms …  17.1 ms    162 runs
+
+Summary
+  './recopy' ran
+    1.45 ± 0.11 times faster than './rehash'
+```
+
 
 ## 查看机器硬件信息
 
@@ -104,7 +183,7 @@ sudo pacman -S dmidecode
 sudo dmidecode -t memory
 ```
 
-**结果**
+结果
 
 <details>
   <summary>点击 展开/收起 结果</summary>
@@ -203,7 +282,7 @@ sudo dmidecode -t memory
 getconf LEVEL1_DCACHE_LINESIZE
 ```
 
-**结果**
+结果
 
 ```bash
 64

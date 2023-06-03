@@ -168,6 +168,7 @@ pre {
   white-space: pre;
   white-space: pre-wrap;
   word-wrap: break-word;
+  background: #eee;
 }
 
 b, strong {
