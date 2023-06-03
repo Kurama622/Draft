@@ -1,3 +1,9 @@
+<!-- vim-markdown-toc GitLab -->
+
+* [伪装tty获取程序输出](#伪装tty获取程序输出)
+* [c++自定义内存分配器](#c自定义内存分配器)
+
+<!-- vim-markdown-toc -->
 ## 伪装tty获取程序输出
 
 ```cpp
@@ -72,3 +78,64 @@ int main() {
 
 2. 可以实现fzf类似的文本预览效果
 
+## c++自定义内存分配器
+```cpp
+#include <vector>
+#include <iostream>
+#include <limits>
+
+// 自定义内存分配器
+class MemoryAllocator {
+public:
+    // 分配内存
+    void* allocate(size_t size) {
+        void* ptr = malloc(size);
+        std::cout << "Allocated: \t" << size << " bytes, \t address: \t" << ptr << std::endl;
+        return ptr;
+    }
+
+    // 释放内存
+    void deallocate(void* ptr, size_t size) {
+        std::cout << "Deallocated: \t" << size << " bytes, \t address: \t" << ptr << std::endl;
+        free(ptr);
+    }
+};
+
+// 使用自定义的内存分配器
+template <typename T>
+class MyAllocator {
+public:
+    using value_type = T;
+
+    MyAllocator() noexcept {}
+    template <typename U> constexpr MyAllocator(const MyAllocator<U>&) noexcept {}
+
+    T* allocate(std::size_t n) {
+        if (n > std::numeric_limits<std::size_t>::max() / sizeof(T))
+            throw std::bad_alloc();
+
+        return static_cast<T*>(memory_allocator.allocate(n * sizeof(T)));
+    }
+
+    void deallocate(T* p, std::size_t n) noexcept {
+        memory_allocator.deallocate(p, n * sizeof(T));
+    }
+
+private:
+    static MemoryAllocator memory_allocator;
+};
+
+template <typename T>
+MemoryAllocator MyAllocator<T>::memory_allocator;
+
+// 使用自定义的内存分配器分配和释放内存
+int main() {
+    std::vector<int, MyAllocator<int>> v;
+
+    for (int i = 0; i < 4; ++i) {
+      v.push_back(i);
+    }
+
+    return 0;
+}
+```
