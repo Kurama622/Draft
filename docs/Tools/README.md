@@ -191,7 +191,7 @@ sudo dmidecode -t memory
 <details>
   <summary>点击 展开/收起 结果</summary>
     <pre><code>
-# dmidecode 3.5
+    # dmidecode 3.5
     Getting SMBIOS data from sysfs.
     SMBIOS 3.3.0 present.
 
@@ -273,7 +273,8 @@ sudo dmidecode -t memory
             Volatile Size: 8 GB
             Cache Size: None
             Logical Size: None
-    </code></pre>
+
+</code></pre>
 </details>
 
 可以看到此电脑最多支持64G的内存，目前安装了2条8G的内存条
