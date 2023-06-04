@@ -130,6 +130,7 @@ sudo pacman -S dmidecode
 ```
 
 #### 支持的选项
+
 <details>
   <summary>点击 展开/收起 内容</summary>
     ```bash
