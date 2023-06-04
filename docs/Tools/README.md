@@ -9,6 +9,8 @@
         * [安装](#安装-1)
         * [支持的选项](#支持的选项)
     * [获取系统的CACHE_LINE](#获取系统的cache_line)
+* [文本搜索工具ripgrep](#文本搜索工具ripgrep)
+    * [用法](#用法)
 
 <!-- vim-markdown-toc -->
 
@@ -286,4 +288,51 @@ getconf LEVEL1_DCACHE_LINESIZE
 
 ```bash
 64
+```
+
+## 文本搜索工具ripgrep
+
+替代GNU grep
+
+### 用法
+
+1. 基础用法
+
+```bash 
+rg 'keywords'
+```
+
+2. 使用正则
+
+```bash
+rg -e '[0-9]\.'                 # 查找1., 2.这种形式的文本
+rg -e '[0-9]\.' -g 'site/**'    # 在site目录及其子目录下查找1., 2.这种形式的文本
+```
+
+3. 搜索单词
+
+```bash
+rg -e '\bkey\b'                 # 只查找key这个单词，相当于grep中的grep -E '\<key\>' -rn ./
+rg -w 'key'
+```
+
+4. 只查找指定文件类型
+
+```bash
+rg -t md '\bkey'                # 只在markdown文件中查找
+rg -t md -t html '\bkey'        # 只在markdown和html文件中查找
+rg -g '*{md, html}' -e '\bkey'  # 只在markdown和html文件中查找
+```
+
+5. 过滤文件类型或文件夹
+
+```bash
+rg -T html -e '\bkey'           # 不查找html文件
+rg -e '\bkey' -g '!site/*'      # 排除site目录
+``` 
+
+6. 显示不包含关键词的行
+
+```bash
+rg -v 'keywords'
 ```
