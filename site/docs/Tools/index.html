@@ -540,6 +540,7 @@ content: "▾ ";
 <li><a href="#查看机器硬件信息" id="toc-查看机器硬件信息">查看机器硬件信息</a>
 <ul>
 <li><a href="#dmidecode" id="toc-dmidecode">dmidecode</a></li>
+<li><a href="#获取系统的cache_line" id="toc-获取系统的cache_line">获取系统的CACHE_LINE</a></li>
 </ul></li>
 <li><a href="#文本搜索工具ripgrep" id="toc-文本搜索工具ripgrep">文本搜索工具ripgrep</a>
 <ul>
@@ -657,153 +658,148 @@ Summary
 <summary>
 点击 展开/收起 内容
 </summary>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>      <span class="ex">Type</span>    Information</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>      <span class="ex">0</span>   BIOS</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>      <span class="ex">1</span>   System</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>      <span class="ex">2</span>   Base Board</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>      <span class="ex">3</span>   Chassis</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>      <span class="ex">4</span>   Processor</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>      <span class="ex">5</span>   Memory Controller</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>      <span class="ex">6</span>   Memory Module</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>      <span class="ex">7</span>   Cache</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>      <span class="ex">8</span>   Port Connector</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>      <span class="ex">9</span>   System Slots</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>      <span class="ex">10</span>  On Board Devices</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>      <span class="ex">11</span>  OEM Strings</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>      <span class="ex">12</span>  System Configuration Options</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>      <span class="ex">13</span>  BIOS Language</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>      <span class="ex">14</span>  Group Associations</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>      <span class="ex">15</span>  System Event Log</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>      <span class="ex">16</span>  Physical Memory Array</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>      <span class="ex">17</span>  Memory Device</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>      <span class="ex">18</span>  32-bit Memory Error</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>      <span class="ex">19</span>  Memory Array Mapped Address</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>      <span class="ex">20</span>  Memory Device Mapped Address</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>      <span class="ex">21</span>  Built-in Pointing Device</span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>      <span class="ex">22</span>  Portable Battery</span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>      <span class="ex">23</span>  System Reset</span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>      <span class="ex">24</span>  Hardware Security</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>      <span class="ex">25</span>  System Power Controls</span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>      <span class="ex">26</span>  Voltage Probe</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>      <span class="ex">27</span>  Cooling Device</span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>      <span class="ex">28</span>  Temperature Probe</span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>      <span class="ex">29</span>  Electrical Current Probe</span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>      <span class="ex">30</span>  Out-of-band Remote Access</span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>      <span class="ex">31</span>  Boot Integrity Services</span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>      <span class="ex">32</span>  System Boot</span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>      <span class="ex">33</span>  64-bit Memory Error</span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>      <span class="ex">34</span>  Management Device</span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>      <span class="ex">35</span>  Management Device Component</span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>      <span class="ex">36</span>  Management Device Threshold Data</span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>      <span class="ex">37</span>  Memory Channel</span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>      <span class="ex">38</span>  IPMI Device</span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>      <span class="ex">39</span>  Power Supply</span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>      <span class="ex">40</span>  Additional Information</span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>      <span class="ex">41</span>  Onboard Device</span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>  <span class="kw">```</span></span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>/details<span class="op">&gt;</span></span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a><span class="co">#### 示例</span></span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a><span class="kw">```</span>bash</span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dmidecode <span class="at">-t</span> memory</span></code></pre></div>
+<pre><code>
+        Type    Information
+        0   BIOS
+        1   System
+        2   Base Board
+        3   Chassis
+        4   Processor
+        5   Memory Controller
+        6   Memory Module
+        7   Cache
+        8   Port Connector
+        9   System Slots
+        10  On Board Devices
+        11  OEM Strings
+        12  System Configuration Options
+        13  BIOS Language
+        14  Group Associations
+        15  System Event Log
+        16  Physical Memory Array
+        17  Memory Device
+        18  32-bit Memory Error
+        19  Memory Array Mapped Address
+        20  Memory Device Mapped Address
+        21  Built-in Pointing Device
+        22  Portable Battery
+        23  System Reset
+        24  Hardware Security
+        25  System Power Controls
+        26  Voltage Probe
+        27  Cooling Device
+        28  Temperature Probe
+        29  Electrical Current Probe
+        30  Out-of-band Remote Access
+        31  Boot Integrity Services
+        32  System Boot
+        33  64-bit Memory Error
+        34  Management Device
+        35  Management Device Component
+        36  Management Device Threshold Data
+        37  Memory Channel
+        38  IPMI Device
+        39  Power Supply
+        40  Additional Information
+        41  Onboard Device
+    </pre>
+</code>
+</details>
+<h4 id="示例-1">示例</h4>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dmidecode <span class="at">-t</span> memory</span></code></pre></div>
 <p>结果</p>
 <details>
 <summary>
 点击 展开/收起 结果
 </summary>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>      <span class="co"># dmidecode 3.5</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>          <span class="ex">Getting</span> SMBIOS data from sysfs.</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>          <span class="ex">SMBIOS</span> 3.3.0 present.</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>          <span class="ex">Handle</span> 0x0022, DMI type 16, 23 bytes</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>          <span class="ex">Physical</span> Memory Array</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Location:</span> System Board Or Motherboard</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Use:</span> System Memory</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Error</span> Correction Type: None</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Maximum</span> Capacity: 64 GB</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Error</span> Information Handle: 0x0025</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Number</span> Of Devices: 2</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>          <span class="ex">Handle</span> 0x0023, DMI type 17, 92 bytes</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>          <span class="ex">Memory</span> Device</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Array</span> Handle: 0x0022</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Error</span> Information Handle: 0x0026</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Total</span> Width: 64 bits</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Data</span> Width: 64 bits</span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Size:</span> 8 GB</span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Form</span> Factor: Row Of Chips</span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Set:</span> None</span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Locator:</span> DIMM 0</span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Bank</span> Locator: P0 CHANNEL A</span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Type:</span> DDR4</span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Type</span> Detail: Synchronous Unbuffered <span class="er">(</span><span class="ex">Unregistered</span><span class="kw">)</span></span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Speed:</span> 3200 MT/s</span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Manufacturer:</span> Samsung</span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Serial</span> Number: 00000000</span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Asset</span> Tag: Not Specified</span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Part</span> Number: M471A1G44AB0-CWE</span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Rank:</span> 1</span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Configured</span> Memory Speed: 3200 MT/s</span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Minimum</span> Voltage: 1.2 V</span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Maximum</span> Voltage: 1.2 V</span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Configured</span> Voltage: 1.2 V</span>
-<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Memory</span> Technology: DRAM</span>
-<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Memory</span> Operating Mode Capability: Volatile memory</span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Firmware</span> Version: Unknown</span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Module</span> Manufacturer ID: Bank 1, Hex 0xCE</span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Module</span> Product ID: Unknown</span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Memory</span> Subsystem Controller Manufacturer ID: Unknown</span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Memory</span> Subsystem Controller Product ID: Unknown</span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Non-Volatile</span> Size: None</span>
-<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Volatile</span> Size: 8 GB</span>
-<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Cache</span> Size: None</span>
-<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Logical</span> Size: None</span>
-<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>          <span class="ex">Handle</span> 0x0024, DMI type 17, 92 bytes</span>
-<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>          <span class="ex">Memory</span> Device</span>
-<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Array</span> Handle: 0x0022</span>
-<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Error</span> Information Handle: 0x0027</span>
-<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Total</span> Width: 64 bits</span>
-<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Data</span> Width: 64 bits</span>
-<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Size:</span> 8 GB</span>
-<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Form</span> Factor: Row Of Chips</span>
-<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Set:</span> None</span>
-<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Locator:</span> DIMM 0</span>
-<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Bank</span> Locator: P0 CHANNEL B</span>
-<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Type:</span> DDR4</span>
-<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Type</span> Detail: Synchronous Unbuffered <span class="er">(</span><span class="ex">Unregistered</span><span class="kw">)</span></span>
-<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Speed:</span> 3200 MT/s</span>
-<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Manufacturer:</span> Samsung</span>
-<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Serial</span> Number: 00000000</span>
-<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Asset</span> Tag: Not Specified</span>
-<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Part</span> Number: M471A1G44AB0-CWE</span>
-<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Rank:</span> 1</span>
-<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Configured</span> Memory Speed: 3200 MT/s</span>
-<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Minimum</span> Voltage: 1.2 V</span>
-<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Maximum</span> Voltage: 1.2 V</span>
-<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Configured</span> Voltage: 1.2 V</span>
-<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Memory</span> Technology: DRAM</span>
-<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Memory</span> Operating Mode Capability: Volatile memory</span>
-<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Firmware</span> Version: Unknown</span>
-<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Module</span> Manufacturer ID: Bank 1, Hex 0xCE</span>
-<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Module</span> Product ID: Unknown</span>
-<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Memory</span> Subsystem Controller Manufacturer ID: Unknown</span>
-<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Memory</span> Subsystem Controller Product ID: Unknown</span>
-<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Non-Volatile</span> Size: None</span>
-<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Volatile</span> Size: 8 GB</span>
-<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Cache</span> Size: None</span>
-<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">Logical</span> Size: None</span>
-<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>  <span class="kw">```</span></span>
-<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>/details<span class="op">&gt;</span></span>
-<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a><span class="ex">可以看到此电脑最多支持64G的内存，目前安装了2条8G的内存条</span></span>
-<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a><span class="co">### 获取系统的CACHE_LINE</span></span>
-<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a><span class="kw">```</span>bash</span>
-<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a><span class="ex">getconf</span> LEVEL1_DCACHE_LINESIZE</span></code></pre></div>
+<pre><code>
+        # dmidecode 3.5
+            Getting SMBIOS data from sysfs.
+            SMBIOS 3.3.0 present.
+
+            Handle 0x0022, DMI type 16, 23 bytes
+            Physical Memory Array
+                    Location: System Board Or Motherboard
+                    Use: System Memory
+                    Error Correction Type: None
+                    Maximum Capacity: 64 GB
+                    Error Information Handle: 0x0025
+                    Number Of Devices: 2
+
+            Handle 0x0023, DMI type 17, 92 bytes
+            Memory Device
+                    Array Handle: 0x0022
+                    Error Information Handle: 0x0026
+                    Total Width: 64 bits
+                    Data Width: 64 bits
+                    Size: 8 GB
+                    Form Factor: Row Of Chips
+                    Set: None
+                    Locator: DIMM 0
+                    Bank Locator: P0 CHANNEL A
+                    Type: DDR4
+                    Type Detail: Synchronous Unbuffered (Unregistered)
+                    Speed: 3200 MT/s
+                    Manufacturer: Samsung
+                    Serial Number: 00000000
+                    Asset Tag: Not Specified
+                    Part Number: M471A1G44AB0-CWE
+                    Rank: 1
+                    Configured Memory Speed: 3200 MT/s
+                    Minimum Voltage: 1.2 V
+                    Maximum Voltage: 1.2 V
+                    Configured Voltage: 1.2 V
+                    Memory Technology: DRAM
+                    Memory Operating Mode Capability: Volatile memory
+                    Firmware Version: Unknown
+                    Module Manufacturer ID: Bank 1, Hex 0xCE
+                    Module Product ID: Unknown
+                    Memory Subsystem Controller Manufacturer ID: Unknown
+                    Memory Subsystem Controller Product ID: Unknown
+                    Non-Volatile Size: None
+                    Volatile Size: 8 GB
+                    Cache Size: None
+                    Logical Size: None
+
+            Handle 0x0024, DMI type 17, 92 bytes
+            Memory Device
+                    Array Handle: 0x0022
+                    Error Information Handle: 0x0027
+                    Total Width: 64 bits
+                    Data Width: 64 bits
+                    Size: 8 GB
+                    Form Factor: Row Of Chips
+                    Set: None
+                    Locator: DIMM 0
+                    Bank Locator: P0 CHANNEL B
+                    Type: DDR4
+                    Type Detail: Synchronous Unbuffered (Unregistered)
+                    Speed: 3200 MT/s
+                    Manufacturer: Samsung
+                    Serial Number: 00000000
+                    Asset Tag: Not Specified
+                    Part Number: M471A1G44AB0-CWE
+                    Rank: 1
+                    Configured Memory Speed: 3200 MT/s
+                    Minimum Voltage: 1.2 V
+                    Maximum Voltage: 1.2 V
+                    Configured Voltage: 1.2 V
+                    Memory Technology: DRAM
+                    Memory Operating Mode Capability: Volatile memory
+                    Firmware Version: Unknown
+                    Module Manufacturer ID: Bank 1, Hex 0xCE
+                    Module Product ID: Unknown
+                    Memory Subsystem Controller Manufacturer ID: Unknown
+                    Memory Subsystem Controller Product ID: Unknown
+                    Non-Volatile Size: None
+                    Volatile Size: 8 GB
+                    Cache Size: None
+                    Logical Size: None
+    </code></pre>
+</details>
+<p>可以看到此电脑最多支持64G的内存，目前安装了2条8G的内存条</p>
+<h3 id="获取系统的cache_line">获取系统的CACHE_LINE</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">getconf</span> LEVEL1_DCACHE_LINESIZE</span></code></pre></div>
 <p>结果</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">64</span></span></code></pre></div>
 <h2 id="文本搜索工具ripgrep">文本搜索工具ripgrep</h2>

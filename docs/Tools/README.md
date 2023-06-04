@@ -133,7 +133,7 @@ sudo pacman -S dmidecode
 
 <details>
   <summary>点击 展开/收起 内容</summary>
-    ```bash
+    <pre><code>
         Type	Information
         0	BIOS
         1	System
@@ -177,7 +177,7 @@ sudo pacman -S dmidecode
         39	Power Supply
         40	Additional Information
         41	Onboard Device
-    ```
+    </pre></code>
 </details>
 
 #### 示例
@@ -190,7 +190,7 @@ sudo dmidecode -t memory
 
 <details>
   <summary>点击 展开/收起 结果</summary>
-    ```bash
+    <pre><code>
         # dmidecode 3.5
             Getting SMBIOS data from sysfs.
             SMBIOS 3.3.0 present.
@@ -273,7 +273,7 @@ sudo dmidecode -t memory
                     Volatile Size: 8 GB
                     Cache Size: None
                     Logical Size: None
-    ```
+    </code></pre>
 </details>
 
 可以看到此电脑最多支持64G的内存，目前安装了2条8G的内存条
