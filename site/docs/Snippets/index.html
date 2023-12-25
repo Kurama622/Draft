@@ -11,8 +11,10 @@ span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
 div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-ul.task-list{list-style: none;}
+
+ul.task-list[class]{list-style: none;}
 ul.task-list li input[type="checkbox"] {
+font-size: inherit;
 width: 0.8em;
 margin: 0 0.8em 0.2em -1.6em;
 vertical-align: middle;
@@ -535,12 +537,17 @@ content: "▾ ";
 <ul>
 <li><a href="#伪装tty获取程序输出" id="toc-伪装tty获取程序输出">伪装tty获取程序输出</a></li>
 <li><a href="#c自定义内存分配器" id="toc-c自定义内存分配器">c++自定义内存分配器</a></li>
+<li><a href="#c线程池" id="toc-c线程池">c++线程池</a>
+<ul>
+<li><a href="#单任务队列" id="toc-单任务队列">单任务队列</a></li>
+</ul></li>
 </ul>
 </nav>
 <!-- vim-markdown-toc GitLab -->
 <ul>
 <li><a href="#伪装tty获取程序输出">伪装tty获取程序输出</a></li>
 <li><a href="#c自定义内存分配器">c++自定义内存分配器</a></li>
+<li><a href="#c线程池">c++线程池</a></li>
 </ul>
 <!-- vim-markdown-toc -->
 <h2 id="伪装tty获取程序输出">伪装tty获取程序输出</h2>
@@ -671,6 +678,127 @@ content: "▾ ";
 <span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="c线程池">c++线程池</h2>
+<h3 id="单任务队列">单任务队列</h3>
+<ul>
+<li>c++11</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;condition_variable&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;functional&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;future&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;memory&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;mutex&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;queue&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;thread&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;vector&gt;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="pp">#include</span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="pp">#include</span><span class="im">&lt;type_traits&gt;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> F<span class="op">,</span> <span class="kw">typename</span><span class="op">...</span> Args<span class="op">&gt;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> invoke_result <span class="op">{</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">using</span> type <span class="op">=</span> <span class="kw">decltype</span><span class="op">(</span><span class="bu">std::</span>declval<span class="op">&lt;</span>F<span class="op">&gt;()(</span><span class="bu">std::</span>declval<span class="op">&lt;</span>Args<span class="op">&gt;()...));</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> F<span class="op">,</span> <span class="kw">typename</span><span class="op">...</span> Args<span class="op">&gt;</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="dt">invoke_result_t</span> <span class="op">=</span> <span class="kw">typename</span> invoke_result<span class="op">&lt;</span>F<span class="op">,</span> Args<span class="op">...&gt;::</span>type<span class="op">;</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ThreadPool <span class="op">{</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="kw">explicit</span> ThreadPool<span class="op">(</span><span class="dt">size_t</span> threads <span class="op">=</span> <span class="bu">std::</span>thread<span class="bu">::</span>hardware_concurrency<span class="op">())</span> <span class="op">:</span> <span class="va">m_stop</span><span class="op">(</span><span class="kw">false</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 根据threads数量创建多个线程</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> threads<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>      workers<span class="op">.</span>emplace_back<span class="op">([</span><span class="kw">this</span><span class="op">]()</span> <span class="op">{</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 工作线程就是一个死循环，不停查询任务队列并取出任务执行</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="op">(</span><span class="kw">true</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>          <span class="bu">std::</span>unique_lock<span class="op">&lt;</span><span class="bu">std::</span>mutex<span class="op">&gt;</span> lock<span class="op">(</span><span class="kw">this</span><span class="op">-&gt;</span><span class="va">m_mtx</span><span class="op">);</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>          <span class="co">// 条件变量等待线程池不为空或者stop</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>          <span class="kw">this</span><span class="op">-&gt;</span><span class="va">m_cv</span><span class="op">.</span>wait<span class="op">(</span>lock<span class="op">,</span> <span class="op">[</span><span class="kw">this</span><span class="op">]()</span> <span class="op">{</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>                       <span class="cf">return</span> <span class="kw">this</span><span class="op">-&gt;</span><span class="va">m_stop</span> <span class="op">||</span> <span class="op">!</span><span class="kw">this</span><span class="op">-&gt;</span>tasks<span class="op">.</span>empty<span class="op">();</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>                     <span class="op">});</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>          <span class="co">// 线程池为空且stop，证明线程池结束，退出线程</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> <span class="op">(</span><span class="kw">this</span><span class="op">-&gt;</span><span class="va">m_stop</span> <span class="op">&amp;&amp;</span> <span class="kw">this</span><span class="op">-&gt;</span>tasks<span class="op">.</span>empty<span class="op">())</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>          <span class="co">// get task</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>          <span class="bu">std::</span>function<span class="op">&lt;</span><span class="dt">void</span><span class="op">()&gt;</span> task <span class="op">=</span> <span class="bu">std::</span>move<span class="op">(</span><span class="kw">this</span><span class="op">-&gt;</span>tasks<span class="op">.</span>front<span class="op">());</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>          <span class="kw">this</span><span class="op">-&gt;</span>tasks<span class="op">.</span>pop<span class="op">();</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>          lock<span class="op">.</span>unlock<span class="op">();</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>          <span class="co">// run task</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>          task<span class="op">();</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>      <span class="op">});</span><span class="co">// lambda表达式构建</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>  <span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> F<span class="op">,</span> <span class="kw">typename</span><span class="op">...</span> Args<span class="op">&gt;</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>  <span class="kw">auto</span> enqueue<span class="op">(</span>F <span class="op">&amp;&amp;</span>f<span class="op">,</span> Args <span class="op">&amp;&amp;...</span>args<span class="op">)</span> <span class="op">-&gt;</span> <span class="bu">std::</span>future<span class="op">&lt;</span><span class="dt">invoke_result_t</span><span class="op">&lt;</span>F<span class="op">,</span> Args<span class="op">...&gt;&gt;</span> <span class="op">{</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>    <span class="kw">using</span> <span class="dt">return_type</span> <span class="op">=</span> <span class="dt">invoke_result_t</span><span class="op">&lt;</span>F<span class="op">,</span> Args<span class="op">...&gt;;</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> task <span class="op">=</span> <span class="bu">std::</span>make_shared<span class="op">&lt;</span><span class="bu">std::</span>packaged_task<span class="op">&lt;</span><span class="dt">return_type</span><span class="op">()&gt;&gt;(</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>bind<span class="op">(</span><span class="bu">std::</span>forward<span class="op">&lt;</span>F<span class="op">&gt;(</span>f<span class="op">),</span> <span class="bu">std::</span>forward<span class="op">&lt;</span>Args<span class="op">&gt;(</span>args<span class="op">)...));</span>    <span class="co">// 完美转发，构造任务仿函数的指针</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>future<span class="op">&lt;</span><span class="dt">return_type</span><span class="op">&gt;</span> res <span class="op">=</span> task<span class="op">-&gt;</span>get_future<span class="op">();</span>                  <span class="co">// 获得函数执行的future返回</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>      <span class="bu">std::</span>unique_lock<span class="op">&lt;</span><span class="bu">std::</span>mutex<span class="op">&gt;</span> lock<span class="op">(</span><span class="va">m_mtx</span><span class="op">);</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> <span class="op">(</span><span class="va">m_stop</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>        <span class="cf">throw</span> <span class="bu">std::</span>runtime_error<span class="op">(</span><span class="st">&quot;enqueue on stopped Thread pool&quot;</span><span class="op">);</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>      <span class="co">// add task</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>      tasks<span class="op">.</span>emplace<span class="op">([</span>task <span class="op">=</span> <span class="bu">std::</span>move<span class="op">(</span>task<span class="op">)]()</span> <span class="op">{</span> <span class="op">(*</span>task<span class="op">)();</span> <span class="op">});</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>                                                            <span class="co">// 入队列后即可解锁</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>    <span class="va">m_cv</span><span class="op">.</span>notify_one<span class="op">();</span>                                           <span class="co">// 仅唤醒一个线程，避免无意义的竞争</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> res<span class="op">;</span></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>  <span class="op">~</span>ThreadPool<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>      <span class="bu">std::</span>unique_lock<span class="op">&lt;</span><span class="bu">std::</span>mutex<span class="op">&gt;</span> lock<span class="op">(</span><span class="va">m_mtx</span><span class="op">);</span></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>      <span class="va">m_stop</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>    <span class="va">m_cv</span><span class="op">.</span>notify_all<span class="op">();</span><span class="co">// 唤醒所有线程，清理任务</span></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="bu">std::</span>thread<span class="op"> &amp;</span>worker<span class="op">:</span> workers<span class="op">)</span></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>      worker<span class="op">.</span>join<span class="op">();</span><span class="co">// 阻塞，等待所有线程执行结束</span></span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="bu">std::</span>thread<span class="op">&gt;</span> workers<span class="op">;</span></span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>queue<span class="op">&lt;</span><span class="bu">std::</span>function<span class="op">&lt;</span><span class="dt">void</span><span class="op">()&gt;&gt;</span> tasks<span class="op">;</span></span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>mutex<span class="op"> </span><span class="va">m_mtx</span><span class="op">;</span></span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>condition_variable<span class="op"> </span><span class="va">m_cv</span><span class="op">;</span></span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>  <span class="dt">bool</span> <span class="va">m_stop</span><span class="op">;</span></span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> a <span class="op">+</span> b<span class="op">;</span></span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> Print<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>cout<span class="op"> &lt;&lt;</span> <span class="st">&quot;hello world&quot;</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>  ThreadPool thread_pool<span class="op">(</span><span class="dv">4</span><span class="op">);</span></span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">10</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>    <span class="co">// lambda</span></span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>    thread_pool<span class="op">.</span>enqueue<span class="op">([</span>i<span class="op">]</span> <span class="op">{</span></span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>      <span class="bu">std::</span>cout<span class="op"> &lt;&lt;</span> <span class="st">&quot;Task &quot;</span> <span class="op">&lt;&lt;</span> i <span class="op">&lt;&lt;</span> <span class="st">&quot; is running&quot;</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>    <span class="op">});</span></span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>    <span class="co">// non-void function</span></span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>    <span class="co">// std::cout &lt;&lt; thread_pool.enqueue(add, 1, 2).get() &lt;&lt; std::endl;</span></span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>    <span class="co">// void function</span></span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>    <span class="co">// thread_pool.enqueue(Print);</span></span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>cin<span class="op">.</span>get<span class="op">();</span></span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 
 <!-- Javascript added by toc-css.lua to make TOC expandable on click -->
 <script>
