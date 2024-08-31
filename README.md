@@ -1,4 +1,4 @@
-# 倔强的贝吉塔 
+# Kurama's Blog 
 
 markdown+pandoc搭建的博客
 
